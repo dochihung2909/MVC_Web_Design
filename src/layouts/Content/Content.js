@@ -9,11 +9,13 @@ import styles from './Content.module.scss'
 
 const cx = classNames.bind(styles)
 
-function Content() {
+function Content({ profile }) {
     const { notes } = useContext(NoteContext)
 
     const [selected, setSelected] = useState({})
     const [isCreate, setIsCreate] = useState(false)
+
+    console.log(isCreate, selected)
 
     const handleChangeSelected = (note) => {
         setSelected(note)
@@ -26,11 +28,11 @@ function Content() {
 
     return (
         <div className={cx('wrapper')}>
-            <ListTodo className="col-3">
+            <ListTodo className={cx('list-todo', 'col-lg-3 col-sm-1 col-1')}>
                 {notes.length > 0 ? (
                     notes.map((note) => (
                         <ListItem
-                            className={cx({ active: selected.id === note.id })}
+                            className={cx('list-item', { active: selected.id === note.id })}
                             key={note.id}
                             title={note.title}
                             desc={note.desc}
@@ -41,16 +43,24 @@ function Content() {
                     <span className={cx('empty-note')}>You don't have any note!</span>
                 )}
             </ListTodo>
-            {isCreate ? (
+            {isCreate && (
                 <Note
+                    author={profile.name}
                     setSelected={setSelected}
-                    newId={notes.length + 1}
                     setIsCreate={setIsCreate}
-                    isCreate
-                    className="col-9"
+                    newId={(notes[notes.length - 1]?.id || 0) + 1}
+                    isCreate={isCreate}
+                    className={cx('note-wrapper', 'col-xl-9 col-lg-11 col-md-11 col-sm-11 col-10-2')}
                 ></Note>
-            ) : (
-                Object.keys(notes).length > 0 && <Note note={selected} className="col-9"></Note>
+            )}
+            {Object.keys(selected).length > 0 && (
+                <Note
+                    setIsCreate={setIsCreate}
+                    author={profile.name}
+                    setSelected={setSelected}
+                    note={selected}
+                    className={cx('note-wrapper', 'col-xl-9 col-lg-11 col-md-11 col-sm-11 col-10-2')}
+                ></Note>
             )}
 
             <Button

@@ -6,16 +6,18 @@ import { NoteContext } from '~/context'
 
 const cx = classNames.bind(styles)
 
-function Note({ newId, isCreate, className, note, setIsCreate, setSelected }) {
+function Note({ newId, isCreate, className, note, setIsCreate, setSelected, author }) {
     const titleRef = useRef(false)
     const descRef = useRef(false)
-    const { notes, addNote, removeNote } = useContext(NoteContext)
+    const cmtRef = useRef(false)
+
+    const { notes, addNote, removeNote, updateNote } = useContext(NoteContext)
     const [isUpdated, setIsUpdated] = useState(false)
     const [newNote, setNewNote] = useState(
         isCreate
             ? {
-                  author: '',
-                  id: notes.length + 1,
+                  author,
+                  id: (notes[notes.length - 1]?.id || 0) + 1,
                   title: !isCreate ? note.title : 'Welcome to NOTE APP!',
                   comment: [],
                   createdAt: new Date().toLocaleString('vi-VN'),
@@ -27,6 +29,8 @@ function Note({ newId, isCreate, className, note, setIsCreate, setSelected }) {
             : { ...note },
     )
 
+    const [showComment, setShowComment] = useState(false)
+
     useEffect(() => {
         if (newNote.id < newId) {
             setNewNote((prev) => ({
@@ -37,28 +41,31 @@ function Note({ newId, isCreate, className, note, setIsCreate, setSelected }) {
         }
     }, [newId])
 
+    useEffect(() => {
+        if (!isCreate && note.id != newNote.id) {
+            setNewNote(note)
+            setShowComment(false)
+        }
+    }, [note])
+
     const handleChangeDesc = () => {
         const newDesc = descRef.current.textContent
-        if (newDesc !== newNote.desc) {
-            setIsUpdated(true)
-            setNewNote((prev) => ({
-                ...prev,
-                desc: newDesc,
-                updatedTime: new Date().toLocaleString('vi-VN'),
-            }))
-        }
+        setIsUpdated(true)
+        setNewNote((prev) => ({
+            ...prev,
+            desc: newDesc,
+            updatedTime: new Date().toLocaleString('vi-VN'),
+        }))
     }
 
     const handleChangeTitle = () => {
         const newTitle = titleRef.current.textContent
-        if (newTitle !== newNote.title) {
-            setIsUpdated(true)
-            setNewNote((prev) => ({
-                ...prev,
-                title: newTitle,
-                updatedTime: new Date().toLocaleString('vi-VN'),
-            }))
-        }
+        setIsUpdated(true)
+        setNewNote((prev) => ({
+            ...prev,
+            title: newTitle,
+            updatedTime: new Date().toLocaleString('vi-VN'),
+        }))
     }
 
     const handleAddNote = () => {
@@ -66,6 +73,32 @@ function Note({ newId, isCreate, className, note, setIsCreate, setSelected }) {
         setIsCreate(false)
         setSelected(newNote)
     }
+
+    const handleAddCmt = (e) => {
+        e.preventDefault()
+        const newCmt = {
+            title: cmtRef.current.textContent,
+            author,
+            createAt: new Date().toLocaleString('vi-VN'),
+        }
+        setNewNote((prev) => ({
+            ...prev,
+            comment: [...prev.comment, newCmt],
+        }))
+        updateNote(newNote.id, newNote)
+        console.log(newCmt)
+        cmtRef.current.textContent = ''
+    }
+
+    const handleDelete = () => {
+        removeNote(newNote.id)
+        setIsCreate(undefined)
+        setSelected({})
+    }
+
+    useEffect(() => {
+        updateNote(newNote.id, newNote)
+    }, [newNote])
 
     return (
         <div className={cx('wrapper', { [className]: className })}>
@@ -87,11 +120,12 @@ function Note({ newId, isCreate, className, note, setIsCreate, setSelected }) {
                                 : isUpdated
                                 ? `Updated at ${newNote.updatedTime}`
                                 : `Created at ${newNote.createdAt}`}
+                            {!isCreate && ` by ${newNote.author}`}
                         </i>
                     </div>
                 </div>
                 <Button
-                    onClick={isCreate && handleAddNote}
+                    onClick={isCreate ? handleAddNote : handleDelete}
                     className={cx('submit-btn', 'btn', { 'btn-danger': !isCreate, 'btn-success': isCreate })}
                     title={isCreate ? 'Create' : 'Delete'}
                     iconLeft={!isCreate ? <i className="fa-solid fa-trash"></i> : <i className="fa-solid fa-plus"></i>}
@@ -108,6 +142,47 @@ function Note({ newId, isCreate, className, note, setIsCreate, setSelected }) {
                     {newNote.desc}
                 </p>
             </div>
+            {!isCreate && (
+                <div className={cx('comment')}>
+                    <div className={cx('comment-wrapper')}>
+                        <Button
+                            onClick={() => setShowComment(!showComment)}
+                            className={cx('comment-title', { showCmt: showComment })}
+                            iconLeft={<i className="fa-solid fa-caret-right"></i>}
+                            title="Add Comment"
+                        ></Button>
+
+                        {showComment && (
+                            <>
+                                <div
+                                    className={cx('add-cmt')}
+                                    contentEditable="plaintext-only"
+                                    suppressContentEditableWarning={true}
+                                    ref={cmtRef}
+                                ></div>
+                                <div>
+                                    <Button
+                                        onClick={handleAddCmt}
+                                        iconLeft={<i class="fa-solid fa-paper-plane"></i>}
+                                        className={cx('send-cmt-btn', 'btn btn-primary')}
+                                        title={'Send'}
+                                    ></Button>
+                                </div>
+                            </>
+                        )}
+                        <div className={cx('cmt-list')}>
+                            {newNote.comment.map((cmt, index) => (
+                                <div className={cx('cmt-wrapper')} key={index}>
+                                    <i className={cx('cmt-info')}>
+                                        Create at {cmt.createAt} by {cmt.author}
+                                    </i>
+                                    <div className={cx('cmt-title')}>{cmt.title}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

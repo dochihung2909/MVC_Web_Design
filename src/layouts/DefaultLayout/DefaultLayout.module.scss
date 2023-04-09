@@ -7,3 +7,10 @@
     overflow: hidden;
     position: relative;
 }
+@media (max-width: 1140px) {
+    .wrapper {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+    }
+}

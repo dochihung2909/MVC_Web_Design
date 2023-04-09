@@ -69,3 +69,9 @@ $avatar-size: 40px;
         padding: 4px 10px;
     }
 }
+
+@media (max-width: 1200px) {
+    .search {
+        display: none;
+    }
+}

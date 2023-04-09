@@ -23,7 +23,7 @@
 }
 
 .active {
-    background-color: rgb(223, 223, 47);
+    background-color: #fff49c;
 }
 
 .empty-note {
@@ -32,4 +32,35 @@
     margin: 12px 0;
     height: 100%;
     width: 100%;
+}
+
+@media (max-width: 1140px) {
+    .list-todo {
+        position: absolute;
+        left: 0;
+        width: 60px;
+        background-color: #f0efef;
+        transition: all 0.4s ease;
+
+        &:hover {
+            width: 300px;
+        }
+    }
+
+    .list-item {
+        padding: 12px 20px;
+        & h4 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #ccc;
+            font-size: 1.4rem;
+        }
+    }
+
+    .note-wrapper {
+        margin-left: 60px;
+    }
 }
