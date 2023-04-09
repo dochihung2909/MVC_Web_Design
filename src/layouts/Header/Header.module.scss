@@ -1,0 +1,71 @@
+$header-height: 68px;
+$avatar-size: 40px;
+
+.wrapper {
+    width: 100%;
+    height: $header-height;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+
+    .logo {
+        flex: 1;
+        height: $header-height;
+        display: flex;
+        align-items: center;
+        & > img {
+            height: 150%;
+            object-fit: contain;
+        }
+    }
+
+    .search {
+        border-radius: 16px;
+        border: 1px solid #ccc;
+        overflow: hidden;
+        max-width: 300px;
+        width: 100%;
+
+        & > input {
+            width: 100%;
+            border: 0;
+            padding: 6px 16px;
+            color: #999;
+            outline: none;
+            font-size: 1.6rem;
+        }
+    }
+
+    .menu {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        gap: 10px;
+        .user {
+            padding: 4px 10px;
+            border-radius: 8px;
+            background-color: #ccc;
+            align-items: center;
+            display: flex;
+            gap: 6px;
+
+            .user-avt {
+                width: $avatar-size;
+                height: $avatar-size;
+                display: flex;
+            }
+
+            .user-name {
+                margin: 0;
+                font-size: 1.6rem;
+            }
+        }
+    }
+
+    .logout-btn {
+        padding: 4px 10px;
+    }
+}
