@@ -56,6 +56,7 @@ $avatar-size: 40px;
                 width: $avatar-size;
                 height: $avatar-size;
                 display: flex;
+                border-radius: 50%;
             }
 
             .user-name {
