@@ -1,18 +1,53 @@
 import classNames from 'classnames/bind'
 import styles from './DefaultLayout.module.scss'
 import Header from '~/layouts/Header'
-import Content from '../Content'
+import Content from '~/layouts/Content'
+import { NoteContext } from '~/context'
+import { useEffect, useState } from 'react'
 
 const cx = classNames.bind(styles)
 
 function DefaultLayout() {
+    const [notes, setNotes] = useState(JSON.parse(localStorage.getItem('notes')) || [])
+
+    useEffect(() => {
+        localStorage.setItem('notes', JSON.stringify(notes))
+
+        return () => {}
+    }, [notes])
+
     return (
-        <div className={cx('wrapper', 'container')}>
-            <Header></Header>
-            <div className={cx('body')}>
+        <NoteContext.Provider
+            value={{
+                notes,
+                addNote(newNote) {
+                    setNotes((prev) => {
+                        return [...prev, newNote]
+                    })
+                },
+                removeNote(id) {
+                    const newNotes = [...notes]
+                    newNotes.forEach((note) => {
+                        if (note.id === id) {
+                            note.delete = true
+                        }
+                    })
+                },
+                getLength() {
+                    let length
+                    setNotes((prev) => {
+                        length = prev.length
+                        return prev
+                    })
+                    return length
+                },
+            }}
+        >
+            <div className={cx('wrapper', 'container gx-0')}>
+                <Header></Header>
                 <Content></Content>
             </div>
-        </div>
+        </NoteContext.Provider>
     )
 }
 

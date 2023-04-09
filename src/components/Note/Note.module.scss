@@ -1,0 +1,38 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .title {
+            padding: 4px 8px;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .modify-date {
+            padding: 0 8px;
+            font-size: 1.3rem;
+            font-weight: 400;
+        }
+    }
+
+    .body {
+        .note-detail {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 4px 12px;
+            font-size: 1.6rem;
+        }
+    }
+
+    .submit-btn {
+        padding: 4px 8px;
+        height: 35px;
+    }
+}

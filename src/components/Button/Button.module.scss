@@ -1,8 +1,18 @@
 .wrapper {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 
     .title {
         // color: #000;
         font-size: 1.6rem;
+    }
+
+    & i {
+        display: flex;
+        margin-top: 2px;
+        font-size: 1.4rem;
     }
 }

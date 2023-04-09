@@ -3,11 +3,11 @@ import styles from './ListItem.module.scss'
 
 const cx = classNames.bind(styles)
 
-function ListItem({ title, body }) {
+function ListItem({ onClick, className, title, desc }) {
     return (
-        <div className={cx('wrapper')}>
+        <div onClick={onClick} className={cx('wrapper', { [className]: className })}>
             <h4 className={cx('title')}>{title}</h4>
-            <p className={cx('body')}>{body}</p>
+            <p className={cx('desc')}>{desc}</p>
         </div>
     )
 }

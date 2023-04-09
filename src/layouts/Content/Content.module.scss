@@ -1,3 +1,35 @@
 .wrapper {
-    width: 300px;
+    height: calc(100% - 69px);
+    display: flex;
+    position: relative;
+
+    .add-note {
+        position: absolute;
+        bottom: 30px;
+        font-size: 1.6rem;
+        left: 30px;
+        padding: 6px 12px;
+
+        &:hover i {
+            transition: all 0.5s ease;
+            transform: rotate(450deg);
+        }
+
+        & i {
+            transition: all 0.5s ease;
+            font-size: 2.4rem;
+        }
+    }
+}
+
+.active {
+    background-color: rgb(223, 223, 47);
+}
+
+.empty-note {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0;
+    height: 100%;
+    width: 100%;
 }
